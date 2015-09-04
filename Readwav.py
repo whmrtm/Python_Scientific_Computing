@@ -4,7 +4,7 @@ import pylab as pl
 import numpy as np
 
 
-f = wave.open(r"C:\Users\Owen\desktop\sample.wav", "rb")
+f = wave.open(r"sample.wav", "rb")
 
 # (nchannels, sampwidth, framerate, nframes, comptype, compname)
 params = f.getparams()
