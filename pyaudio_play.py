@@ -8,13 +8,13 @@ wf = wave.open(r"sample.wav", 'rb')
 
 p = pyaudio.PyAudio()
 
-# 打开声音输出流
+# Open stream
 stream = p.open(format = p.get_format_from_width(wf.getsampwidth()),
                 channels = wf.getnchannels(),
                 rate = wf.getframerate(),
                 output = True)
 
-# 写声音输出流进行播放
+# write stream
 while True:
     data = wf.readframes(chunk)
     if data == "": break
