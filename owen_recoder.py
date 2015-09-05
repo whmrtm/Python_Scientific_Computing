@@ -11,7 +11,7 @@ import numpy as np
 import pyaudio
 import pylab as pl
 import threading
-import struct
+#import struct
 
 FRAMERATE = 44100
 
@@ -21,7 +21,7 @@ class OwenRecorder():
         self._samplewidth = 2
         self._framerate = 44100
         self._active = False
-        self._sec = 5
+        self._sec = 3
         self._buffersize = 1024
         self.threadsDieNow = False
         
@@ -49,9 +49,10 @@ class OwenRecorder():
         wave_data = wave_data.T
         self.audio = wave_data
         time = np.arange(0,self._sec,self._sec/(self.frames*self._buffersize))
+        
+        pl.plot(time,wave_data[0])
+        pl.show()
         return time
-#        pl.plot(time,wave_data[0])
-#        pl.show()
     def record(self):
         """Record data from stream"""
         frames = int(self._framerate/self._buffersize*self._sec)
