@@ -1,36 +1,39 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Sep  3 09:13:07 2015
+import ui_plot
+import sys
+from PyQt4 import QtCore, QtGui
+import PyQt4.Qwt5 as Qwt
+from owen_recoder import *
 
-@author: Owen
-"""
+def plotSomething():
+    x = OR.test_plot()
+    y = OR.audio
+    c.setData(x,y)
+    uiplot.qwtPlot.replot()
 
-# -*- coding: utf-8 -*-
-import wave
-import pylab as pl
-import numpy as np
+if __name__ == "__main__":
+    app = QtGui.QApplication(sys.argv)
 
+    win_plot = ui_plot.QtGui.QMainWindow()
+    uiplot = ui_plot.Qwt5
+    uiplot.setupUi(win_plot)
+    #uiplot.btnB.clicked.connect(lambda: uiplot.timer.setInterval(100.0))
+    #uiplot.btnC.clicked.connect(lambda: uiplot.timer.setInterval(10.0))
+    #uiplot.btnD.clicked.connect(lambda: uiplot.timer.setInterval(1.0))
+    c=Qwt.QwtPlotCurve()  
+    c.attach(uiplot.qwtPlot)
 
-f = wave.open(r"C:\Users\Owen\desktop\sample.wav", "rb")
+    uiplot.qwtPlot.setAxisScale(uiplot.qwtPlot.yLeft, 0, 1000)
 
-# (nchannels, sampwidth, framerate, nframes, comptype, compname)
-params = f.getparams()
-nchannels, sampwidth, framerate, nframes = params[:4]
+    uiplot.timer = QtCore.QTimer()
+    uiplot.timer.start(1.0)
 
-# read data of the wave
-str_data = f.readframes(nframes)
-f.close()
+    win_plot.connect(uiplot.timer, QtCore.SIGNAL('timeout()'), plotSomething) 
+    
+    OR = OwenRecorder()
+    
 
-#transfer data into array
-wave_data = np.fromstring(str_data, dtype=np.short)
-wave_data.shape = -1, 2
-wave_data = wave_data.T
-time = np.arange(0, nframes) * (1.0 / framerate)
-
-# plot
-pl.subplot(211) 
-pl.plot(time, wave_data[0])
-pl.subplot(212) 
-pl.plot(time, wave_data[1], c="g")
-pl.xlabel("time (seconds)")
-pl.show()
+    ### DISPLAY WINDOWS
+    win_plot.show()
+    code=app.exec_()
+    SR.close()
+    sys.exit(code)
