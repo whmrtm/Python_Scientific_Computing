@@ -21,7 +21,7 @@ class OwenRecorder():
         self._samplewidth = 2
         self._framerate = 44100
         self._active = False
-        self._sec = 3
+        self._sec = 0.1
         self._buffersize = 1024
         self.threadsDieNow = False
         
@@ -47,11 +47,11 @@ class OwenRecorder():
         wave_data = np.fromstring(str_data, dtype=np.short)
         wave_data.shape = -1, 2
         wave_data = wave_data.T
-        self.audio = wave_data
+        self.audio = wave_data[0]
         time = np.arange(0,self._sec,self._sec/(self.frames*self._buffersize))
-        
-        pl.plot(time,wave_data[0])
-        pl.show()
+#        
+#        pl.plot(time,wave_data[0])
+#        pl.show()
         return time
     def record(self):
         """Record data from stream"""
@@ -78,11 +78,11 @@ class OwenRecorder():
     def audio_plot(self):
         pl.plot(self.audio.flatten)
         pl.show()
-OR = OwenRecorder()
-
-OR.setup()
-OR.test_plot()
-
-                
+#OR = OwenRecorder()
+#
+#OR.setup()
+#OR.test_plot()
+#
+#                
         
 
