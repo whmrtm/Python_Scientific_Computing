@@ -9,7 +9,6 @@ import wave
 import numpy as np
 import pylab as plt
 import struct
-import random
 
 framerate = 44100
 time = 5
