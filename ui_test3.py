@@ -19,8 +19,10 @@ class DataPlot(Qwt.QwtPlot):
 
 #        self.setCanvasBackground(Qt.Qt.w)
 #        self.alignScales()
-
+        self.canvas().setFrameStyle(QtGui.QFrame.Box | QtGui.QFrame.Plain)
+        self.canvas().setLineWidth(1)
         # Initialize data
+
 
         self.OR = OwenRecorder()
         self.OR.setup()
@@ -35,13 +37,17 @@ class DataPlot(Qwt.QwtPlot):
         self.curve.attach(self)
         self.curve.setPen(QtGui.QPen(QtCore.Qt.red))
         self.curve.setData(x,y)
+        
+
         mY = Qwt.QwtPlotMarker()
         mY.setYValue(0.0)
         mY.attach(self)
+        self.setAxisScale(Qwt.QwtPlot.yLeft,0,6000,500)
         self.setAxisTitle(Qwt.QwtPlot.xBottom, "Time (seconds)")
         self.setAxisTitle(Qwt.QwtPlot.yLeft, "Values")   
         self.startTimer(100)
     def timerEvent(self,event):
+        self.OR.setup()
         x = self.OR.time
         y = self.OR.test_read()
         self.curve.setData(x,y)

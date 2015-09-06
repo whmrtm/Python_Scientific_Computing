@@ -21,7 +21,7 @@ class OwenRecorder():
         self._samplewidth = 2
         self._framerate = 44100
         self._active = False
-        self._sec = 0.1
+        self._sec = 0.05
         self._buffersize = 1024
         
         
