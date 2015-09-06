@@ -22,7 +22,7 @@ Created on Sat Sep  5 16:53:40 2015
 import sys
 from PyQt4 import QtCore, QtGui
 import PyQt4.Qwt5 as Qwt
-from owen_recoder import *
+from owen_recorder import *
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
