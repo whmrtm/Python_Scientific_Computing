@@ -22,11 +22,12 @@ class OwenRecorder():
         self._framerate = 44100
         self._active = False
         self._sec = 0.1
-        self._buffersize = 1024
+        self._buffersize = 2**12
         
         
 
     def setup(self):
+        '''setup basic parameters'''
         self.frames = int(self._framerate/self._buffersize*self._sec)                        
         self.p = pyaudio.PyAudio()
         self.stream = self.p.open(format = pyaudio.paInt16,
@@ -36,13 +37,18 @@ class OwenRecorder():
                              frames_per_buffer = self._buffersize)
         self.audio = np.empty((self.frames*self._buffersize),
                                  dtype=np.int16)
-        self.time = np.arange(0,self._sec,self._sec/(self.frames*self._buffersize))
+                                 
+        self.time = np.arange(0,self._sec,
+                              self._sec/(self.frames*self._buffersize),
+                                dtype = float)
         self.threadsDieNow = False
         self.newAudio = False
     def close(self):
+        '''close'''
         self.p.close(self.stream)
     
     def test_read(self):
+        '''test my read'''
         str_data = []        
         data = self.stream.read(self._buffersize*self.frames)
         str_data.append(data)
@@ -52,6 +58,23 @@ class OwenRecorder():
         wave_data = wave_data.T
         self.audio = wave_data[0]
         return wave_data[0]
+    def fft(self,data=None,trimBy=3,logScale=False,divBy=200):
+        self.test_read()
+        if data == None: 
+                data = self.audio.flatten()
+        left,right = np.split(np.abs(np.fft.fft(data)),2)
+        ys=np.add(left,right[::-1])
+        if logScale:
+            ys=np.multiply(20,np.log10(ys))
+        xs=np.arange(self._buffersize/2,dtype=float)
+        if trimBy:
+            i=int((self._buffersize/2)/trimBy)
+            ys=ys[:i]
+            xs=xs[:i]*self._framerate/self._buffersize
+        if divBy:
+            ys=ys/float(divBy)
+        return xs,ys
+        
     def record(self):
         """Record data from stream"""
         while not self.threadsDieNow:            
@@ -59,17 +82,19 @@ class OwenRecorder():
             for i in range(self.frames):
                 data = self.stream.read(self._buffersize)
                 str_data.append(data)
+            self.audio = str_data
             str_data = b''.join(str_data)
             wave_data = np.fromstring(str_data, dtype=np.short)
             wave_data.shape = -1, 2
             wave_data = wave_data.T
-            self.audio = wave_data[0]
+            
             self.newAudio = True
                         
     def continuousStart(self):
         """CALL THIS to start running forever."""
         self.t = threading.Thread(target = self.record())
         self.t.start()
+        
 
     def continuousEnd(self):
         """shut down continuous recording."""
@@ -78,7 +103,7 @@ class OwenRecorder():
         pl.plot(self.audio)
         pl.show()
 #OR = OwenRecorder()
-
+#
 #OR.setup()
 #OR.continuousStart()
 #OR.close()
@@ -86,6 +111,10 @@ class OwenRecorder():
 #
 #OR.audio_plot()
 #OR.test_read()
+#xs,ys = OR.fft()
+#print()
+#pl.plot(xs,ys)
+#pl.show()
 #OR.audio_plot()
 #
 #                
