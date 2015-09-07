@@ -42,7 +42,7 @@ class DataPlot(Qwt.QwtPlot):
         mY = Qwt.QwtPlotMarker()
         mY.setYValue(0.0)
         mY.attach(self)
-        self.setAxisScale(Qwt.QwtPlot.yLeft,0,5000,500)
+        self.setAxisScale(Qwt.QwtPlot.yLeft,-2500,2500,1000)
         self.setAxisTitle(Qwt.QwtPlot.xBottom, "Time (seconds)")
         self.setAxisTitle(Qwt.QwtPlot.yLeft, "Values")   
         self.startTimer(100)
