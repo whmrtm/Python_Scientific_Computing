@@ -17,13 +17,14 @@ FRAMERATE = 44100
 
 class OwenRecorder():
     def __init__(self):
+        '''built-in parameters'''
         self._channels = 2
         self._samplewidth = 2
         self._framerate = 44100
         self._active = False
         self._sec = 0.1
+#        control the precision
         self._buffersize = 2**12
-        
         
 
     def setup(self):
@@ -49,6 +50,7 @@ class OwenRecorder():
     
     def test_read(self):
         '''test my read'''
+        #TODO: could use flatten
         str_data = []        
         data = self.stream.read(self._buffersize*self.frames)
         str_data.append(data)
@@ -58,7 +60,7 @@ class OwenRecorder():
         wave_data = wave_data.T
         self.audio = wave_data[0]
         return wave_data[0]
-    def fft(self,data=None,trimBy=3,logScale=False,divBy=200):
+    def fft(self,data=None,trimBy=6,logScale=False,divBy=200):
         self.test_read()
         if data == None: 
                 data = self.audio.flatten()

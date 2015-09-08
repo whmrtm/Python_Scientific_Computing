@@ -21,8 +21,9 @@ class DataPlot(Qwt.QwtPlot):
 
         # Initialize data
         OR = OwenRecorder()
-        self.x = OR.test_plot()
-        self.y = OR.audio
+        OR.setup()
+        self.x = OR.time
+        self.y = OR.test_read()
 
         self.setTitle("A QwtPlot Demonstration")
         self.insertLegend(Qwt.QwtLegend(), Qwt.QwtPlot.BottomLegend);
