@@ -33,12 +33,17 @@ class DataPlot(Qwt.QwtPlot):
         
         self.curve = Qwt.QwtPlotCurve("WTF")
         
-        self.curve.attach(self)
+        
 #        self.curve.setSymbol(Qwt.QwtSymbol(Qwt.QwtSymbol.Ellipse,
 #                                        QtGui.QBrush(),
 #                                        QtGui.QPen(QtCore.Qt.yellow),
 #                                        QtCore.QSize(7, 7)))
-        self.curve.setPen(QtGui.QPen(QtCore.Qt.blue))
+        self.curve.setPen(QtGui.QPen(QtCore.Qt.blue,1.5))
+        self.curve.setStyle(Qwt.QwtPlotCurve.Lines)
+        self.curve.setCurveAttribute(Qwt.QwtPlotCurve.Fitted, True)
+#        self.curve.setBrush()        
+        
+        self.curve.attach(self)        
         self.curve.setData(x,y)
         
 
