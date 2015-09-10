@@ -28,12 +28,12 @@ class DataPlot(Qwt.QwtPlot):
         self.OR.setup()
 
         x = self.OR.time
-        y = self.OR.decible_result        
+        y = self.OR.test_read()        
         
-        self.setTitle("A QwtPlot Demonstration")
+        self.setTitle("A Realtime Amplitude Demonstration")
         self.insertLegend(Qwt.QwtLegend(), Qwt.QwtPlot.BottomLegend);
 
-        self.curve = Qwt.QwtPlotCurve("WTF")
+        self.curve = Qwt.QwtPlotCurve("Amplitude")
         self.curve.attach(self)
         self.curve.setPen(QtGui.QPen(QtCore.Qt.red))
         self.curve.setData(x,y)
@@ -43,7 +43,7 @@ class DataPlot(Qwt.QwtPlot):
         mY.setYValue(0.0)
         mY.attach(self)
         
-        self.setAxisScale(Qwt.QwtPlot.yLeft,0,200,50)
+        self.setAxisScale(Qwt.QwtPlot.yLeft,-500,500,100)
         self.setAxisTitle(Qwt.QwtPlot.xBottom, "Time (seconds)")
         self.setAxisTitle(Qwt.QwtPlot.yLeft, "Values")   
 
@@ -51,7 +51,7 @@ class DataPlot(Qwt.QwtPlot):
     def timerEvent(self,event):
         self.OR.setup()
         x = self.OR.time
-        y = self.OR.decible_result()
+        y = self.OR.test_read()
         self.curve.setData(x,y)
         self.replot()
         

@@ -13,12 +13,10 @@ import pylab as pl
 import threading
 #import struct
 
-FRAMERATE = 44100
-
 class OwenRecorder():
     def __init__(self):
         '''built-in parameters'''
-        self._channels = 1
+        self._channels = 2
         self._samplewidth = 2
         self._framerate = 44100
         self._active = False
@@ -66,7 +64,7 @@ class OwenRecorder():
         wave_data = self.test_read()
         decibles = np.multiply(20, np.log10(np.abs(wave_data)))
         return decibles
-    def fft(self,data=None,trimBy=6,logScale=False,divBy=200):
+    def fft(self,data=None,trimBy=6,logScale=False,divBy=100):
         self.test_read()
         if data == None: 
                 data = self.audio.flatten()
@@ -119,6 +117,12 @@ class OwenRecorder():
 #
 #OR.audio_plot()
 #OR.test_read()
+#xs = OR.time
+#ys = OR.decible_result()
+
+#print(len(OR.time))
+#print(len(OR.decible_result()))
+
 #xs,ys = OR.fft()
 #print()
 #pl.plot(xs,ys)
