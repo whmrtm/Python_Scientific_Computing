@@ -18,7 +18,7 @@ FRAMERATE = 44100
 class OwenRecorder():
     def __init__(self):
         '''built-in parameters'''
-        self._channels = 2
+        self._channels = 1
         self._samplewidth = 2
         self._framerate = 44100
         self._active = False
@@ -55,11 +55,13 @@ class OwenRecorder():
         data = self.stream.read(self._buffersize*self.frames)
         str_data.append(data)
         str_data = b''.join(str_data)
-        wave_data = np.fromstring(str_data, dtype=np.int16)
-        wave_data.shape = -1, 2
-        wave_data = wave_data.T
-        self.audio = wave_data[0]
-        return wave_data[0]
+        wave_data = np.fromstring(str_data, dtype=np.int16) 
+        if self._channels == 2:        
+            wave_data.shape = -1, 2
+            wave_data = wave_data.T
+            wave_data = wave_data[0]
+        self.audio = wave_data
+        return wave_data
     def fft(self,data=None,trimBy=6,logScale=False,divBy=200):
         self.test_read()
         if data == None: 
