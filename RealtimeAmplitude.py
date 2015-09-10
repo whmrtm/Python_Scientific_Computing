@@ -28,7 +28,7 @@ class DataPlot(Qwt.QwtPlot):
         self.OR.setup()
 
         x = self.OR.time
-        y = self.OR.test_read()        
+        y = self.OR.decible_result        
         
         self.setTitle("A QwtPlot Demonstration")
         self.insertLegend(Qwt.QwtLegend(), Qwt.QwtPlot.BottomLegend);
@@ -43,7 +43,7 @@ class DataPlot(Qwt.QwtPlot):
         mY.setYValue(0.0)
         mY.attach(self)
         
-        self.setAxisScale(Qwt.QwtPlot.yLeft,-2500,2500,1000)
+        self.setAxisScale(Qwt.QwtPlot.yLeft,0,200,50)
         self.setAxisTitle(Qwt.QwtPlot.xBottom, "Time (seconds)")
         self.setAxisTitle(Qwt.QwtPlot.yLeft, "Values")   
 
@@ -51,7 +51,7 @@ class DataPlot(Qwt.QwtPlot):
     def timerEvent(self,event):
         self.OR.setup()
         x = self.OR.time
-        y = self.OR.test_read()
+        y = self.OR.decible_result()
         self.curve.setData(x,y)
         self.replot()
         

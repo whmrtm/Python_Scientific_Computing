@@ -62,6 +62,10 @@ class OwenRecorder():
             wave_data = wave_data[0]
         self.audio = wave_data
         return wave_data
+    def decible_result(self):
+        wave_data = self.test_read()
+        decibles = np.multiply(20, np.log10(np.abs(wave_data)))
+        return decibles
     def fft(self,data=None,trimBy=6,logScale=False,divBy=200):
         self.test_read()
         if data == None: 
