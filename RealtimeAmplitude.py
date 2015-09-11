@@ -29,7 +29,6 @@ class DataPlot(Qwt.QwtPlot):
 
         x = self.OR.time
         y = self.OR.test_read()        
-        
         self.setTitle("A Realtime Amplitude Demonstration")
         self.insertLegend(Qwt.QwtLegend(), Qwt.QwtPlot.BottomLegend);
 
@@ -43,7 +42,7 @@ class DataPlot(Qwt.QwtPlot):
         mY.setYValue(0.0)
         mY.attach(self)
         
-        self.setAxisScale(Qwt.QwtPlot.yLeft,-500,500,100)
+        self.setAxisScale(Qwt.QwtPlot.yLeft,-200,200,50)
         self.setAxisTitle(Qwt.QwtPlot.xBottom, "Time (seconds)")
         self.setAxisTitle(Qwt.QwtPlot.yLeft, "Values")   
 

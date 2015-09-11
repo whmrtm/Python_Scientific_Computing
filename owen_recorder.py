@@ -60,10 +60,7 @@ class OwenRecorder():
             wave_data = wave_data[0]
         self.audio = wave_data
         return wave_data
-    def decible_result(self):
-        wave_data = self.test_read()
-        decibles = np.multiply(20, np.log10(np.abs(wave_data)))
-        return decibles
+        
     def fft(self,data=None,trimBy=6,logScale=False,divBy=100):
         self.test_read()
         if data == None: 
@@ -108,27 +105,9 @@ class OwenRecorder():
     def audio_plot(self):
         pl.plot(self.audio)
         pl.show()
-#OR = OwenRecorder()
+OR = OwenRecorder()
 #
-#OR.setup()
-#OR.continuousStart()
-#OR.close()
-#OR.continuousEnd()
-#
-#OR.audio_plot()
-#OR.test_read()
-#xs = OR.time
-#ys = OR.decible_result()
-
-#print(len(OR.time))
-#print(len(OR.decible_result()))
-
-#xs,ys = OR.fft()
-#print()
-#pl.plot(xs,ys)
-#pl.show()
-#OR.audio_plot()
-#
-#                
-        
-
+OR.setup()
+xs,ys = OR.fft()
+pl.plot(xs,ys)
+pl.show()
