@@ -21,9 +21,11 @@ wave_data = wave_data.T
 time = np.arange(0, nframes) * (1.0 / framerate)
 
 # plot
-pl.subplot(211) 
+pl.subplot(311) 
 pl.plot(time, wave_data[0])
-pl.subplot(212) 
+pl.subplot(312) 
 pl.plot(time, wave_data[1], c="g")
 pl.xlabel("time (seconds)")
+pl.subplot(313)
+pl.magnitude_spectrum(wave_data[0],Fs = params[2])
 pl.show()
