@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon Sep  7 20:21:21 2015
-
 @author: Owen
 """
 
@@ -28,10 +27,10 @@ class DataPlot(Qwt.QwtPlot):
         
         x, y = self.OR.fft()        
 
-        self.setTitle("A QwtPlot Demonstration")
+        self.setTitle("A RealtimeFFT Demonstration")
         self.insertLegend(Qwt.QwtLegend(), Qwt.QwtPlot.BottomLegend);
         
-        self.curve = Qwt.QwtPlotCurve("WTF")
+        self.curve = Qwt.QwtPlotCurve("Frequency")
         
         
 #        self.curve.setSymbol(Qwt.QwtSymbol(Qwt.QwtSymbol.Ellipse,
@@ -52,8 +51,8 @@ class DataPlot(Qwt.QwtPlot):
         mY.attach(self)
         
         self.setAxisScale(Qwt.QwtPlot.yLeft,0,1400,200)
-        self.setAxisTitle(Qwt.QwtPlot.xBottom, "Time (seconds)")
-        self.setAxisTitle(Qwt.QwtPlot.yLeft, "Values")   
+        self.setAxisTitle(Qwt.QwtPlot.xBottom, "Frequency")
+        self.setAxisTitle(Qwt.QwtPlot.yLeft, "Amplitude")   
 
         self.startTimer(100)
     def timerEvent(self,event):
@@ -69,8 +68,6 @@ def main():
 #    myplot.OR.continuousStart()
     myplot.show()
     myplot.OR.close()
-    
-    
     sys.exit(app.exec_())
 
 

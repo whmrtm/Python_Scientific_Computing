@@ -62,6 +62,7 @@ class OwenRecorder():
         return wave_data
         
     def fft(self,data=None,trimBy=6,logScale=False,divBy=100):
+        '''Fourier transform'''        
         self.test_read()
         if data == None: 
                 data = self.audio.flatten()
@@ -105,9 +106,11 @@ class OwenRecorder():
     def audio_plot(self):
         pl.plot(self.audio)
         pl.show()
-OR = OwenRecorder()
-#
-OR.setup()
-xs,ys = OR.fft()
-pl.plot(xs,ys)
-pl.show()
+
+
+#test:
+#OR = OwenRecorder()
+#OR.setup()
+#xs,ys = OR.fft()
+#pl.plot(xs,ys)
+#pl.show()
