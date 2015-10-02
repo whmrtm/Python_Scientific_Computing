@@ -1,17 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Sep  4 21:52:13 2015
+Created on Fri Sep  14 21:52:13 2015
 
 @author: Owen
 """
 
-#Owen's sound recorder, begin with just fft figure.
-#Will work on the specgram version later on
 import numpy as np
 import pyaudio
 import pylab as pl
 import threading
-#import struct
 
 class OwenRecorder():
     def __init__(self):
@@ -42,6 +39,7 @@ class OwenRecorder():
                                 dtype = float)
         self.threadsDieNow = False
         self.newAudio = False
+        
     def close(self):
         '''close'''
         self.p.close(self.stream)
@@ -49,6 +47,7 @@ class OwenRecorder():
     def test_read(self):
         '''test my read'''
         #TODO: could use flatten
+        #extract one channel of signal
         str_data = []        
         data = self.stream.read(self._buffersize*self.frames)
         str_data.append(data)
@@ -67,45 +66,52 @@ class OwenRecorder():
         if data == None: 
                 data = self.audio.flatten()
         left,right = np.split(np.abs(np.fft.fft(data)),2)
-        ys=np.add(left,right[::-1])
+        ys = np.add(left,right[::-1])
+        # log scale        
         if logScale:
-            ys=np.multiply(20,np.log10(ys))
-        xs=np.arange(self._buffersize/2,dtype=float)
+            ys = np.multiply(20,np.log10(ys))
+        xs = np.arange(self._buffersize/2,dtype=float)
+        # control frequency range
         if trimBy:
-            i=int((self._buffersize/2)/trimBy)
-            ys=ys[:i]
-            xs=xs[:i]*self._framerate/self._buffersize
+            i = int((self._buffersize/2)/trimBy)
+            ys = ys[:i]
+            xs = xs[:i]*self._framerate/self._buffersize
+        # control anplitude
         if divBy:
-            ys=ys/float(divBy)
+            ys = ys/float(divBy)
         return xs,ys
         
-    def record(self):
-        """Record data from stream"""
-        while not self.threadsDieNow:            
-            str_data = []        
-            for i in range(self.frames):
-                data = self.stream.read(self._buffersize)
-                str_data.append(data)
-            self.audio = str_data
-            str_data = b''.join(str_data)
-            wave_data = np.fromstring(str_data, dtype=np.short)
-            wave_data.shape = -1, 2
-            wave_data = wave_data.T
-            
-            self.newAudio = True
-                        
-    def continuousStart(self):
-        """CALL THIS to start running forever."""
-        self.t = threading.Thread(target = self.record())
-        self.t.start()
         
-
-    def continuousEnd(self):
-        """shut down continuous recording."""
-        self.threadsDieNow = True
-    def audio_plot(self):
-        pl.plot(self.audio)
-        pl.show()
+        
+    '''temporarily useless'''                    
+#
+#    def record(self):
+#        """Record data from stream"""
+#        while not self.threadsDieNow:            
+#            str_data = []        
+#            for i in range(self.frames):
+#                data = self.stream.read(self._buffersize)
+#                str_data.append(data)
+#            self.audio = str_data
+#            str_data = b''.join(str_data)
+#            wave_data = np.fromstring(str_data, dtype=np.short)
+#            wave_data.shape = -1, 2
+#            wave_data = wave_data.T
+#            
+#            self.newAudio = True
+#            
+#    def continuousStart(self):
+#        """CALL THIS to start running forever."""
+#        self.t = threading.Thread(target = self.record())
+#        self.t.start()
+#        
+#
+#    def continuousEnd(self):
+#        """shut down continuous recording."""
+#        self.threadsDieNow = True
+#    def audio_plot(self):
+#        pl.plot(self.audio)
+#        pl.show()
 
 
 #test:

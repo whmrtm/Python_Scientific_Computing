@@ -20,10 +20,14 @@ Fs = int(1.0/dt)  # the sampling frequency
 # the frequency vector, bins are the centers of the time bins in which
 # the power is computed, and im is the matplotlib.image.AxesImage
 # instance
-
-ax1 = subplot(211)
-plot(t, x)
-subplot(212, sharex=ax1)
-Pxx, freqs, bins, im = specgram(x, NFFT=NFFT, Fs=Fs, noverlap=900,
-                                cmap=cm.gist_heat)
-show()
+a=[1,2,3,4,5]
+b=[9,8]
+print(concatenate((a[:1],a[:-1]),1))
+a[0]=b
+print(a)
+#ax1 = subplot(211)
+#plot(t, x)
+#subplot(212, sharex=ax1)
+#Pxx, freqs, bins, im = specgram(x, NFFT=NFFT, Fs=Fs, noverlap=900,
+#                                cmap=cm.gist_heat)
+#show()

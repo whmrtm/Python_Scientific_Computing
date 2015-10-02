@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Sep  6 14:52:59 2015
+Created on Sun Sep  16 14:52:59 2015
 
 @author: Owen
 """
@@ -27,31 +27,37 @@ class DataPlot(Qwt.QwtPlot):
         self.OR = OwenRecorder()
         self.OR.setup()
 
-        x = self.OR.time
-        y = self.OR.test_read()        
+        self.x = np.arange(0,100*self.OR._sec,
+                              self.OR._sec/(self.OR.frames*self.OR._buffersize),
+                                dtype = float)
+        self.y = np.zeros(len(self.x), float)
+        
         self.setTitle("A Realtime Amplitude Demonstration")
         self.insertLegend(Qwt.QwtLegend(), Qwt.QwtPlot.BottomLegend);
 
         self.curve = Qwt.QwtPlotCurve("Amplitude")
         self.curve.attach(self)
         self.curve.setPen(QtGui.QPen(QtCore.Qt.red))
-        self.curve.setData(x,y)
-        
+
 
         mY = Qwt.QwtPlotMarker()
         mY.setYValue(0.0)
         mY.attach(self)
         
-        self.setAxisScale(Qwt.QwtPlot.yLeft,-200,200,50)
+        self.setAxisScale(Qwt.QwtPlot.yLeft,-300,300,100)
         self.setAxisTitle(Qwt.QwtPlot.xBottom, "Time (seconds)")
         self.setAxisTitle(Qwt.QwtPlot.yLeft, "Values")   
 
         self.startTimer(100)
     def timerEvent(self,event):
         self.OR.setup()
-        x = self.OR.time
-        y = self.OR.test_read()
-        self.curve.setData(x,y)
+        single_length = len(self.OR.time)
+        '''Move the plot from left to the right'''
+        self.y = np.concatenate((self.y[:single_length],self.y[:-single_length]),1)
+        single_result = self.OR.test_read()         
+        for i in range(single_length):
+            self.y[i] = single_result[i]
+        self.curve.setData(self.x,self.y)        
         self.replot()
         
 def main():  
