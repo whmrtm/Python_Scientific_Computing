@@ -8,23 +8,25 @@ Created on Fri Sep  14 21:52:13 2015
 import numpy as np
 import pyaudio
 import pylab as pl
-import threading
+
 
 class OwenRecorder():
     def __init__(self):
         '''built-in parameters'''
         self._channels = 2
         self._samplewidth = 2
-        self._framerate = 44100
+        self._framerate = 48100
         self._active = False
-        self._sec = 0.1
+        self._sec = 0.01
 #        control the precision
         self._buffersize = 2**12
         
 
     def setup(self):
         '''setup basic parameters'''
-        self.frames = int(self._framerate/self._buffersize*self._sec)                        
+        self.frames = int(self._framerate*self._sec/self._buffersize)
+        if self.frames == 0:
+            self.frames = 1                                    
         self.p = pyaudio.PyAudio()
         self.stream = self.p.open(format = pyaudio.paInt16,
                              channels = self._channels,
@@ -81,42 +83,22 @@ class OwenRecorder():
             ys = ys/float(divBy)
         return xs,ys
         
-        
-        
-    '''temporarily useless'''                    
-#
-#    def record(self):
-#        """Record data from stream"""
-#        while not self.threadsDieNow:            
-#            str_data = []        
-#            for i in range(self.frames):
-#                data = self.stream.read(self._buffersize)
-#                str_data.append(data)
-#            self.audio = str_data
-#            str_data = b''.join(str_data)
-#            wave_data = np.fromstring(str_data, dtype=np.short)
-#            wave_data.shape = -1, 2
-#            wave_data = wave_data.T
-#            
-#            self.newAudio = True
-#            
-#    def continuousStart(self):
-#        """CALL THIS to start running forever."""
-#        self.t = threading.Thread(target = self.record())
-#        self.t.start()
-#        
-#
-#    def continuousEnd(self):
-#        """shut down continuous recording."""
-#        self.threadsDieNow = True
-#    def audio_plot(self):
-#        pl.plot(self.audio)
-#        pl.show()
-
-
+       
 #test:
-#OR = OwenRecorder()
-#OR.setup()
-#xs,ys = OR.fft()
-#pl.plot(xs,ys)
-#pl.show()
+OR = OwenRecorder()
+OR.setup()
+pl.show()
+xs,ys = OR.fft()
+points, = pl.plot(xs,ys)
+points.set_linewidth(2.5)
+pl.ylabel("Amplitude")
+pl.xlabel("Frequency")
+pl.ylim(0,4000)
+pl.title("Realtime FFT Demonstration")
+
+while True:    
+    xs,ys = OR.fft()
+    points.set_data(xs,ys)
+    pl.pause(0.01)
+    
+    

@@ -1,33 +1,28 @@
-from pylab import *
+from PyDAQmx import *
+import numpy
 
-dt = 0.0005
-t = arange(0.0, 20.0, dt)
-s1 = sin(2*pi*500*t)
-s2 = 2*sin(2*pi*400*t)
+# Declaration of variable passed by reference
+taskHandle = TaskHandle()
+read = int32()
+data = numpy.zeros((1000,), dtype=numpy.float64)
 
-# create a transient "chirp"
-mask = where(logical_and(t>10, t<12), 1.0, 0.0)
-s2 = s2 * mask
+try:
+    # DAQmx Configure Code
+    DAQmxCreateTask("",byref(taskHandle))
+    DAQmxCreateAIVoltageChan(taskHandle,"Dev1/ai0","",DAQmx_Val_Cfg_Default,-10.0,10.0,DAQmx_Val_Volts,None)
+    DAQmxCfgSampClkTiming(taskHandle,"",10000.0,DAQmx_Val_Rising,DAQmx_Val_FiniteSamps,1000)
 
-# add some noise into the mix
-nse = 0.01*randn(len(t))
+    # DAQmx Start Code
+    DAQmxStartTask(taskHandle)
 
-x = s1  # the signal
-NFFT = 1024       # the length of the windowing segments
-Fs = int(1.0/dt)  # the sampling frequency
+    # DAQmx Read Code
+    DAQmxReadAnalogF64(taskHandle,1000,10.0,DAQmx_Val_GroupByChannel,data,1000,byref(read),None)
 
-# Pxx is the segments x freqs array of instantaneous power, freqs is
-# the frequency vector, bins are the centers of the time bins in which
-# the power is computed, and im is the matplotlib.image.AxesImage
-# instance
-a=[1,2,3,4,5]
-b=[9,8]
-print(concatenate((a[:1],a[:-1]),1))
-a[0]=b
-print(a)
-#ax1 = subplot(211)
-#plot(t, x)
-#subplot(212, sharex=ax1)
-#Pxx, freqs, bins, im = specgram(x, NFFT=NFFT, Fs=Fs, noverlap=900,
-#                                cmap=cm.gist_heat)
-#show()
+    print("Acquired %d points")
+except DAQError as err:
+    print("DAQmx Error: %s")
+finally:
+    if taskHandle:
+        # DAQmx Stop Code
+        DAQmxStopTask(taskHandle)
+        DAQmxClearTask(taskHandle)
