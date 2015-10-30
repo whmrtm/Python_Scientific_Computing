@@ -25,7 +25,7 @@ f = wave.open(r"sample.wav", "rb")
 # (nchannels, sampwidth, framerate, nframes, comptype, compname)
 params = f.getparams()
 nchannels, sampwidth, framerate, nframes = params[:4]
-
+print(params)
 # read data of the wave
 str_data = f.readframes(nframes)
 f.close()
