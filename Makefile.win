@@ -1,15 +1,15 @@
-# Project: testportaudio
+# Project: TestTone
 # Makefile created by Dev-C++ 5.7.1
 
 CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
-OBJ      = portaudiotesttone.o
-LINKOBJ  = portaudiotesttone.o
-LIBS     = -L"D:/Programming/Dev-Cpp/MinGW32/lib" -L"D:/Programming/Dev-Cpp/MinGW32/mingw32/lib" -static-libstdc++ -static-libgcc C:/MinGW/msys/1.0/local/lib/libportaudio.dll.a C:/MinGW/msys/1.0/local/lib/libportaudio.la C:/MinGW/msys/1.0/local/bin/libportaudio-2.dll ../../Programming/Dev-Cpp/MinGW32/lib/libwinmm.a -g3
+OBJ      = main.o
+LINKOBJ  = main.o
+LIBS     = -L"D:/Programming/Dev-Cpp/MinGW32/lib" -L"D:/Programming/Dev-Cpp/MinGW32/mingw32/lib" -static-libstdc++ -static-libgcc ../../Programming/Dev-Cpp/MinGW32/lib/NIDAQmx.lib -g3
 INCS     = -I"D:/Programming/Dev-Cpp/MinGW32/include" -I"D:/Programming/Dev-Cpp/MinGW32/mingw32/include" -I"D:/Programming/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include"
 CXXINCS  = -I"D:/Programming/Dev-Cpp/MinGW32/include" -I"D:/Programming/Dev-Cpp/MinGW32/mingw32/include" -I"D:/Programming/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include" -I"D:/Programming/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include/c++"
-BIN      = testportaudio.exe
+BIN      = TestTone.exe
 CXXFLAGS = $(CXXINCS) -g3
 CFLAGS   = $(INCS) -g3
 RM       = rm.exe -f
@@ -24,5 +24,5 @@ clean: clean-custom
 $(BIN): $(OBJ)
 	$(CC) $(LINKOBJ) -o $(BIN) $(LIBS)
 
-portaudiotesttone.o: portaudiotesttone.c
-	$(CC) -c portaudiotesttone.c -o portaudiotesttone.o $(CFLAGS)
+main.o: main.c
+	$(CC) -c main.c -o main.o $(CFLAGS)

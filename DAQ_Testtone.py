@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*
 """
 Created on Thu Oct 29 21:11:39 2015
 
@@ -28,10 +28,10 @@ def readwav(path):
 
     #transfer data into array (float64 format!!)
     wave_data = np.fromstring(str_data, dtype=np.short)
-    wave_data = np.array(wave_data, dtype=np.float64)
-    
+    wave_data = np.array(wave_data, dtype=np.float64)    
     wave_data.shape = -1, 2
     wave_data = wave_data.T
+    # The data has to be c-continuous and writable
     wave_data = np.require(wave_data, dtype=np.float64,
                            requirements=['C','W'])
     #time = np.arange(0, nframes) * (1.0 / framerate)
@@ -78,15 +78,7 @@ DAQmxCfgSampClkTiming(Readtask,"",SamplingRate,
 '''TODO:make up the time delay to reduce error'''
 DAQmxStartTask(Readtask)
 DAQmxStartTask(Writetask)
-#for n in range(80):
-#    time.sleep(0.3)
-#    if Written==0:
-#        print("samples written")
-#    else:
-#        print("Not Written")
-#
-# read stores the size of the samples
-# data stores the values   
+
 read = int32()
 data = np.zeros((nframes,), dtype=numpy.float64)
 DAQmxReadAnalogF64(Readtask,nframes,10.0,DAQmx_Val_GroupByChannel,
@@ -95,6 +87,7 @@ DAQmxStopTask(Writetask)
 DAQmxStopTask(Readtask)
 
 '''Display the results '''
+
 pl.figure(0) 
 sec = nframes / framerate
 time1 = np.linspace(0,sec,len(data))
