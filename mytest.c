@@ -20,7 +20,7 @@ int readcsv(double* leftchannel, double* rightchannel){
 		if(temp<0)
 			break;   // End reading when fscanf cannot match any data
 		
-		printf("%lf %lf\n",*(leftchannel+num),*(rightchannel+num));
+//		printf("%lf %lf\n",*(leftchannel+num),*(rightchannel+num));
 		num++;
 		// num recourd the number of sets of data
 		// Extent the arrays if the size is not big enough
@@ -40,9 +40,6 @@ int main(){
 	double *leftchannel = (double*)malloc(sizeof(double)*mysize); 
 	double *rightchannel = (double*)malloc(sizeof(double)*mysize);
 	readcsv(leftchannel, rightchannel);
-	int i = 0;
-	for(;i < 1000; i++){
-		printf("%lf, ",leftchannel[i]);
-	}
+	printf("%lf, ",leftchannel[0]);
    	return 0; 
 }
