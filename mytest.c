@@ -1,45 +1,49 @@
 #include <stdio.h>
 #include <stdlib.h>
-int mysize = 10000;
-int readcsv(double* leftchannel, double* rightchannel){
+
+int main(){
+	/* Initialize */
+	int mysize = 10000;  // Initial size of the data
+   	int temp = 1, num = 0, i = 0; // temp->stores the result of fscanf, num -> records the number of data
+    double *leftchannel; 
+	double *rightchannel;
+	leftchannel = (double*)malloc(sizeof(double)*mysize);
+	rightchannel = (double*)malloc(sizeof(double)*mysize);
+
+	/* read the csv file */
 	char file_name[25];
    	FILE *fp;
    	printf("Enter the name of file\n");
    	gets(file_name);
-   	int temp = 1, num = 0;
-   	fp = fopen(file_name,"r"); // read mode
- 
+   	fp = fopen(file_name,"r");
 	if( fp == NULL ){
-	printf("The file does not exist!\n");
+		printf("The file does not exist!\n");
    	}
    	
-   	printf("The contents of %s file are :\n", file_name);
-   	
+   	/* Begin reading data */
 	while(1){
-		temp = fscanf(fp,"%lf,%lf",leftchannel+num,rightchannel+num);
-		if(temp<0)
+		temp = fscanf(fp,"%lf,%lf", leftchannel+num, rightchannel+num);
+		if(temp<0){
 			break;   // End reading when fscanf cannot match any data
+		}
+		num++;       // Data number increment
 		
-//		printf("%lf %lf\n",*(leftchannel+num),*(rightchannel+num));
-		num++;
-		// num recourd the number of sets of data
-		// Extent the arrays if the size is not big enough
+		/* Extend the arrays if the size is not big enough */
 		if(num >= mysize){
-			mysize += 10000;
+			mysize *= 2; // double the size			
 			leftchannel = realloc(leftchannel, mysize*sizeof(double));
 			rightchannel = realloc(rightchannel, mysize*sizeof(double));
 		}
+		
 	}
 	printf("Finish reading! The number of rows: %d.\n", num);
-			
-   	fclose(fp);
-   	return num; 
-}
 
-int main(){
-	double *leftchannel = (double*)malloc(sizeof(double)*mysize); 
-	double *rightchannel = (double*)malloc(sizeof(double)*mysize);
-	readcsv(leftchannel, rightchannel);
-	printf("%lf, ",leftchannel[0]);
+
+	
+	/* Clost file pointer and free memory space */		
+   	fclose(fp);
+	free(leftchannel);
+	free(rightchannel);
+	
    	return 0; 
 }
